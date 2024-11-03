@@ -5,25 +5,19 @@ provider "aws" {
 }
 
 
-variable "name" {
 
-  description = "CICD_machine"
+resource "aws_instance" "Jenkins_CI_server" {
 
-}
+  ami = "ami-0e86e20dae9224db8"
 
-
-resource "aws_instance" "devops_jenkins_server" {
-
-  ami = "ami-005fc0f236362e99f"
-
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
 
   key_name = "hike_devops01"
 
 
   tags = {
 
-    Name = "${var.name}"
+    Name = "ci-server"
 
   }
 

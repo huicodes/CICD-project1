@@ -56,12 +56,3 @@
     - name: Display Jenkins initial admin password
       debug:
         var: jenkins_password.stdout
-
-    - name: Check if Jenkins is accessible
-      uri:
-        url: http://localhost:8080
-        status_code: 200
-      register: jenkins_status
-      until: jenkins_status.status == 200
-      retries: 5
-      delay: 10
