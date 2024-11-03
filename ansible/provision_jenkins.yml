@@ -3,7 +3,7 @@
   hosts: jenkins
   become: yes
   vars:
-    java_package: openjdk-11-jdk
+    java_package: openjdk-17-jdk
     #jenkins_repo_key_url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
     #jenkins_repo_url: deb https://pkg.jenkins.io/debian-stable binary/
 
