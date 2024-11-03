@@ -1,0 +1,67 @@
+---
+- name: Install and Configure Jenkins
+  hosts: jenkins
+  become: yes
+  vars:
+    java_package: openjdk-11-jdk
+    #jenkins_repo_key_url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+    #jenkins_repo_url: deb https://pkg.jenkins.io/debian-stable binary/
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install Java
+      apt:
+        name: "{{ java_package }}"
+        state: present
+
+    - name: Download Jenkins repository key
+      get_url:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+        dest: /usr/share/keyrings/jenkins-keyring.asc
+        mode: '0644'
+
+    - name: Add Jenkins repository
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/"
+        state: present
+        filename: jenkins
+        update_cache: yes
+
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+
+    - name: Ensure Jenkins service is started and enabled
+      systemd:
+        name: jenkins
+        state: started
+        enabled: yes
+
+    - name: Wait for Jenkins to start up
+      wait_for:
+        port: 8080
+        delay: 10
+        timeout: 300
+
+    - name: Get Jenkins initial admin password
+      command: cat /var/lib/jenkins/secrets/initialAdminPassword
+      register: jenkins_password
+      changed_when: false
+
+    - name: Display Jenkins initial admin password
+      debug:
+        var: jenkins_password.stdout
+
+    - name: Check if Jenkins is accessible
+      uri:
+        url: http://localhost:8080
+        status_code: 200
+      register: jenkins_status
+      until: jenkins_status.status == 200
+      retries: 5
+      delay: 10
