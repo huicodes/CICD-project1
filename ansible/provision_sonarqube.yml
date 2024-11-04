@@ -21,6 +21,7 @@
           - curl
           - software-properties-common
           - wget
+          - python3-pip
         state: present
 
     - name: Add Docker's official GPG key
