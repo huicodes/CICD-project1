@@ -46,8 +46,9 @@
         enabled: yes
 
     - name: Install Docker Python module
-      pip:
-        name: docker
+      apt:
+        name: python3-docker
+        state: present
 
     - name: Create Docker network for SonarQube
       docker_network:
