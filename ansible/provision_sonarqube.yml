@@ -83,7 +83,7 @@
           - sonarqube_extensions:/opt/sonarqube/extensions
           - sonarqube_logs:/opt/sonarqube/logs
         ulimits:
-          nofile:
+          - name: nofile
             soft: 65536
             hard: 65536
         restart_policy: always
