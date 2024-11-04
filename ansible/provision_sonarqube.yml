@@ -82,10 +82,6 @@
           - sonarqube_data:/opt/sonarqube/data
           - sonarqube_extensions:/opt/sonarqube/extensions
           - sonarqube_logs:/opt/sonarqube/logs
-        ulimits:
-          - name: nofile
-            soft: 65536
-            hard: 65536
         restart_policy: always
 
     - name: Wait for SonarQube to be ready
