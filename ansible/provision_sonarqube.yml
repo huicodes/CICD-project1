@@ -11,6 +11,7 @@
     - name: Update apt package index
       apt:
         update_cache: yes
+        allow_unauthenticated: yes
 
     - name: Install required packages for Docker and Trivy
       apt:
@@ -29,7 +30,8 @@
 
     - name: Add the Docker APT repository
       apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        state: present
 
     - name: Install Docker CE
       apt:
